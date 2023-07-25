@@ -4,5 +4,5 @@
         stroke-width="12" stroke="rgb(59 130 246)"
     />
 
-    <line x1="68" y1="63" x2="100" y2="90" style="stroke:hsl(0, 0%, 52%); stroke-width:12" />
+    <line x1="68" y1="63" x2="100" y2="90" style="stroke:rgb(59 130 246); stroke-width:12" />
 </svg>
