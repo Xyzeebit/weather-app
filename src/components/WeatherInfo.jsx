@@ -10,7 +10,7 @@ const WeatherCard = ({ children }) => {
         );
     } else {
         return (
-            <div className='w-80 h-80 bg-slate-50 rounded shadow-md mb-8 md:mb-0'>
+            <div className='w-full md:w-4/5 h-80 bg-slate-50 rounded shadow-md mb-8'>
                {children}
             </div>
         );

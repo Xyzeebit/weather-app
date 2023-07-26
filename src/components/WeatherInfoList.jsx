@@ -30,7 +30,7 @@ const WeatherInfoList = () => {
     ];
 
     return (
-      <div className="md:flex md:flex-wrap justify-center item-center gap-10 mt-10">
+      <div className="mt-10 flex flex-col justify-center items-center">
         {data.map((weather) => {
           return (
             <WeatherCard key={weather.id}>
