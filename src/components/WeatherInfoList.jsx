@@ -1,45 +1,26 @@
-import { CardHeader, WeatherCard } from "./WeatherInfo";
-import img from '../assets/thunderstorm.jpg';
+import { CardHeader, WeatherCard, WeatherInfoMain } from "./WeatherInfo";
+import { getLocation, getMainWeatherFromDays } from "../libs";
 
 const WeatherInfoList = () => {
-    const data = [
-      {
-        id: "haj8Han",
-        city: "Lagos",
-        country: "Nigeria",
-        image: img,
-      },
-      {
-        id: "haj8Dan",
-        city: "New York",
-        country: "USA",
-        image: img,
-      },
-      {
-        id: "hahj8Dan",
-        city: "London",
-        country: "England",
-        image: img,
-      },
-      {
-        id: "haxj8Dan",
-        city: "Los Angeles",
-        country: "Carlifornia, USA",
-        image: img,
-      },
-    ];
+  const { city, country } = getLocation();
+  const data = getMainWeatherFromDays();
 
-    return (
+  return (
+    <>
+      <WeatherInfoMain location={{ city, country }} weather={data[0]} />
       <div className="mt-10 flex flex-col justify-center items-center">
-        {data.map((weather) => {
-          return (
-            <WeatherCard key={weather.id}>
-              <CardHeader city={weather.city} country={weather.country} image={weather.image} />
-            </WeatherCard>
-          );
+        {data.map((weather, i) => {
+          if (i !== 0) {
+            return (
+              <WeatherCard key={weather.id}>
+                <CardHeader city={city} country={country} />
+              </WeatherCard>
+            );
+          }
         })}
       </div>
-    );
+    </>
+  );
 }
 
 export default WeatherInfoList;

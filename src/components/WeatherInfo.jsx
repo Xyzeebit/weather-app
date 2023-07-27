@@ -1,6 +1,8 @@
 import PropsType from 'prop-types';
 import { useState } from 'react';
 import Loader from './Loader';
+import stormImage from '../assets/storm.png';
+import locationImage from '../assets/location.png';
 
 const WeatherCard = ({ children }) => {
     const [loading] = useState(false);
@@ -45,4 +47,105 @@ CardHeader.propTypes = {
     image: PropsType.string
 }
 
-export { WeatherCard, CardHeader };
+const WeatherInfoMain = ({ location, weather }) => {
+  return (
+    <div className="bg-white px-4 md:px-24 py-1 md:py-8 md:flex md:justify-between md:items-start border-box">
+      <div>
+        <div>
+          <img src={stormImage} alt={weather.icon} width={250} height={180} />
+          <div className="font-bold text-3xl md:text-6xl text-gray-600">
+            {weather.temperature}℃
+          </div>
+        </div>
+        <div className="pt-4">
+          <div className="font-bold text-2xl text-gray-600">
+            {weather.conditions}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex-row">
+          <div className="flex items-center justify-end">
+            <img
+              src={locationImage}
+              alt={location.city}
+              width={30}
+              height={50}
+            />
+            <div className="text-red-400 font-light text-2xl md:text-3xl pl-2">
+              {location.city}
+            </div>
+          </div>
+          {location.country && (
+            <div className="text-sm text-blue-400 text-right">
+              {location.country}
+            </div>
+          )}
+        </div>
+
+        <div className="pt-10">
+          <table className="table-auto">
+            <thead>
+              <tr>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Time
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Temperature
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Humidity
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Wind speed
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Visibility
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Sun rise
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Sun set
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className='text-sm'>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.time}
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.temperature} ℃
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.humidity}%
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.windspeed} kmh
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.visibility}%
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.sunrise} AM
+                </td>
+                <td className="border px-4 py-2 text-center text-gray-600">
+                  {weather.sunset} PM
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+WeatherInfoMain.propTypes = {
+  location: PropsType.object,
+  weather: PropsType.object
+}
+
+export { WeatherCard, CardHeader, WeatherInfoMain };

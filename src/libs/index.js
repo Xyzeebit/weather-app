@@ -6,8 +6,8 @@ import weather from '../data.json';
  * @returns {object}
  */
 export function getLocation() {
-    const [city] = weather.resolvedAddress.split(',');
-    return {city};
+    const [city, country] = weather.resolvedAddress.split(',');
+    return {city, country};
 }
 
 /**
@@ -16,9 +16,12 @@ export function getLocation() {
  * @param {object} wea - weather JSON object parameter
  * @returns {object} it returns an object containing the weather report
  */
-export function getWeatherReport(wea) {
+function getWeatherReport(wea) {
     const w = {};
+    const d = new Date(wea.datetimeEpoch);
 
+    w["id"] = wea.datetimeEpoch;
+    w["time"] = d.getHours() + ' : ' + d.getMinutes();
     w["datetime"] = wea.datetime;
     w["temperature"] = wea.temp;
     w["dew"] = wea.dew;
