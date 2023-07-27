@@ -24,6 +24,7 @@ function getWeatherReport(wea) {
     w["time"] = d.getHours() + ' : ' + d.getMinutes();
     w["datetime"] = wea.datetime;
     w["temperature"] = wea.temp;
+    w["feelslike"] = wea.feelslike;
     w["dew"] = wea.dew;
     w["humidity"] = wea.humidity;
     w["windspeed"] = wea.windspeed;
@@ -31,8 +32,8 @@ function getWeatherReport(wea) {
     w["cloudcover"] = wea.cloudcover;
     w["visibility"] = wea.visibility;
     w["uvindex"] = wea.uvindex;
-    w["sunrise"] = wea.sunrise;
-    w["sunset"] = wea.sunset;
+    w["sunrise"] = wea.sunrise ?? weather.days[0].sunrise;
+    w["sunset"] = wea.sunset ?? weather.days[0].sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
     w["icon"] = wea.icon;

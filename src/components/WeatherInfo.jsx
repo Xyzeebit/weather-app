@@ -1,8 +1,20 @@
 import PropsType from 'prop-types';
 import { useState } from 'react';
 import Loader from './Loader';
+
 import stormImage from '../assets/storm.png';
 import locationImage from '../assets/location.png';
+import timeIcon from '../assets/moon-dark.png'
+import humidityIcon from "../assets/humidity.png";
+import tempIcon from "../assets/temperature.png";
+import tempFeelsIcon from '../assets/hot.png'
+import windIcon from "../assets/wind.png";
+import visibilityIcon from "../assets/visibility.png";
+import sunriseIcon from "../assets/sunset.png";
+import sunsetIcon from "../assets/sunset.png";
+
+
+
 
 const WeatherCard = ({ children }) => {
     const [loading] = useState(false);
@@ -47,6 +59,75 @@ CardHeader.propTypes = {
     image: PropsType.string
 }
 
+const TableRow = ({ children }) => <tr className="text-sm">{children}</tr>;
+
+TableRow.propTypes = {
+  children: PropsType.node.isRequired
+}
+
+const TableItems = ({ weather, multiple }) => (
+  <>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {multiple ? weather.datetime : weather.time}
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.temperature} ℃
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.feelslike} ℃
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.humidity}%
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.windspeed} kmh
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.visibility}%
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.sunrise ? weather.sunrise + " AM" : "N/A"}
+    </td>
+    <td className="border px-4 py-2 text-center text-gray-600">
+      {weather.sunrise ? weather.sunrise + " PM" : "N/A"}
+    </td>
+  </>
+);
+
+TableItems.propTypes = {
+  weather: PropsType.object.isRequired,
+  multiple: PropsType.bool.isRequired
+}
+
+const TableIcons = () => (
+  <>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={timeIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={tempIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={tempFeelsIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={humidityIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={windIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={visibilityIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={sunriseIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+    <td className="border border-gray-500 bg-gray-100 px-4 py-2">
+      <img src={sunsetIcon} alt="" width={20} height={20} className="m-auto" />
+    </td>
+  </>
+);
+
 const WeatherInfoMain = ({ location, weather }) => {
   return (
     <div className="bg-white px-4 md:px-24 py-1 md:py-8 md:flex md:justify-between md:items-start border-box">
@@ -87,12 +168,15 @@ const WeatherInfoMain = ({ location, weather }) => {
         <div className="pt-10">
           <table className="table-auto">
             <thead>
-              <tr>
+              <TableRow>
                 <th className="border border-gray-500 bg-gray-200 px-4 py-2">
                   Time
                 </th>
                 <th className="border border-gray-500 bg-gray-200 px-4 py-2">
                   Temperature
+                </th>
+                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                  Feels like
                 </th>
                 <th className="border border-gray-500 bg-gray-200 px-4 py-2">
                   Humidity
@@ -109,32 +193,27 @@ const WeatherInfoMain = ({ location, weather }) => {
                 <th className="border border-gray-500 bg-gray-200 px-4 py-2">
                   Sun set
                 </th>
-              </tr>
+              </TableRow>
             </thead>
             <tbody>
-              <tr className='text-sm'>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.time}
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.temperature} ℃
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.humidity}%
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.windspeed} kmh
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.visibility}%
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.sunrise} AM
-                </td>
-                <td className="border px-4 py-2 text-center text-gray-600">
-                  {weather.sunset} PM
-                </td>
-              </tr>
+              <TableRow>
+                <TableIcons />
+              </TableRow>
+              <TableRow>
+                <TableItems weather={weather} />
+              </TableRow>
+              {weather?.hours.length > 0 && (
+                <>
+                  {weather.hours.map((weather, i) => {
+                    if (i > 4) return;
+                    return (
+                      <TableRow key={weather.id}>
+                        <TableItems weather={weather} multiple={true} />
+                      </TableRow>
+                    );
+                  })}
+                </>
+              )}
             </tbody>
           </table>
         </div>
