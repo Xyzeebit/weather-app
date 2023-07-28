@@ -12,7 +12,7 @@ import windIcon from "../assets/wind.png";
 import visibilityIcon from "../assets/visibility.png";
 import sunriseIcon from "../assets/sunset.png";
 import sunsetIcon from "../assets/sunset.png";
-
+import airPressureIcon from "../assets/air.png";
 
 
 
@@ -24,7 +24,7 @@ const WeatherCard = ({ children }) => {
         );
     } else {
         return (
-            <div className='w-full md:w-4/5 h-80 bg-slate-50 rounded shadow-md mb-8'>
+            <div className='w-full md:w-4/5 bg-slate-50 rounded shadow-md mb-8'>
                {children}
             </div>
         );
@@ -35,29 +35,82 @@ WeatherCard.propTypes = {
     children: PropsType.node.isRequired
 }
 
-const CardHeader = ({ city, country, image }) => (
-  <div className="flex justify-between items-center overflow-hidden relative border-b-2 border-cyan-600">
-    <div className='w-40 h-24'>
-      <img
-        src={image}
-        alt={city}
-        width={100}
-        height={100}
-        className="w-full h-full"
-      />
-    </div>
-    <div className="pt-2 pr-4">
-      <div className="font-thin text-5xl text-red-500 text-right">{city}</div>
-      <div className="text-gray-500 pt-2 text-right">{country}</div>
+const WeatherCardTemperature = ({ temperature, time }) => (
+  <div className="flex items-center justify-start py-8">
+    <img src={tempIcon} alt="" width={150} height={200} />
+    <div className="">
+      <div className="font-extrabold text-6xl text-blue-500">
+        {temperature}°C
+      </div>
+      <div className="font-bold text-xl text-center text-red-400 p-1 mt-10 bg-gray-200 rounded-lg rotate-15">
+        {time}
+      </div>
     </div>
   </div>
 );
+WeatherCardTemperature.propTypes = {
+  temperature: PropsType.number.isRequired,
+  time: PropsType.string
+};
 
-CardHeader.propTypes = {
-    city: PropsType.string.isRequired,
-    country: PropsType.string,
-    image: PropsType.string
+const WeatherConditions = ({ conditions }) => (
+  <div className='bg-blue-600 text-white px-8 py-4 font-light text-lg'>{conditions}</div>
+);
+WeatherConditions.propTypes = {
+  conditions: PropsType.string.isRequired
 }
+
+const WeatherTable = ({ weather }) => (
+  <div className="text-gray-500 flex-grow w-full md:w-auto">
+    <div className="flex items-center justify-between border-b-2 py-2 px-8">
+      <div className="inline-flex">
+        <img src={tempFeelsIcon} alt="" width={20} height={20} />
+        <span className="pl-4">Feels Like</span>
+      </div>
+      <span>{weather.feelslike}°C</span>
+    </div>
+    <div className="flex items-center justify-between border-b-2 py-2 px-8">
+      <div className="inline-flex">
+        <img src={windIcon} alt="" width={20} height={20} />
+        <span className="pl-4">Wind</span>
+      </div>
+      <span>{weather.windspeed} kmh</span>
+    </div>
+    <div className="flex items-center justify-between border-b-2 py-2 px-8">
+      <div className="inline-flex">
+        <img src={humidityIcon} alt="" width={20} height={20} />
+        <span className="pl-4">Humidity</span>
+      </div>
+      <span>{weather.humidity}%</span>
+    </div>
+    <div className="flex items-center justify-between border-b-2 py-2 px-8">
+      <div className="inline-flex">
+        <img src={airPressureIcon} alt="" width={20} height={30} />
+        <span className="pl-4">Pressure</span>
+      </div>
+      <span>{weather.pressure}</span>
+    </div>
+    <div className="flex items-center justify-between py-2 px-8">
+      <div className="inline-flex">
+        <img src={visibilityIcon} alt="" width={20} height={20} />
+        <span className="pl-4">Visibility</span>
+      </div>
+      <span>{weather.visibility}</span>
+    </div>
+  </div>
+);
+WeatherTable.propTypes = {
+  weather: PropsType.object.isRequired
+}
+
+const WeatherCardBody = ({ children }) => (
+  <div className='flex flex-col md:flex-row items-center justify-start gap-8'>{children}</div>
+);
+
+WeatherCardBody.propTypes = {
+  children: PropsType.node.isRequired
+}
+
 
 const TableRow = ({ children }) => <tr className="text-sm">{children}</tr>;
 
@@ -135,14 +188,14 @@ const WeatherInfoMain = ({ location, weather }) => {
         <div>
           <img src={stormImage} alt={weather.icon} width={250} height={180} className='m-auto' />
           <div className="mt-4">
-            <span className="font-bold text-red-400">Feels like</span>
-            <span className="font-bold text-5xl md:text-6xl text-gray-600">
+            <span className="font-bold text-red-400">Feels Like</span>
+            <span className="font-bold text-5xl md:text-6xl text-blue-500">
               {weather.feelslike}°C
             </span>
           </div>
         </div>
         <div className="pt-4 md:pt-8 lg:pt-4 md:w-64 leading-tight">
-          <div className="font-bold text-2xl text-gray-600 border-t border-t-2">
+          <div className="font-light text-xl text-gray-600 border-t border-t-2">
             {weather.description}
           </div>
         </div>
@@ -179,22 +232,22 @@ const WeatherInfoMain = ({ location, weather }) => {
                   Temperature
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
-                  Feels like
+                  Feels Like
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Humidity
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
-                  Wind speed
+                  Wind Speed
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Visibility
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
-                  Sun rise
+                  Sun Rise
                 </th>
                 <th className="border border-blue-500 bg-gray-200 px-4 py-2">
-                  Sun set
+                  Sun Set
                 </th>
               </TableRow>
             </thead>
@@ -230,4 +283,4 @@ WeatherInfoMain.propTypes = {
   weather: PropsType.object
 }
 
-export { WeatherCard, CardHeader, WeatherInfoMain };
+export { WeatherCard, WeatherCardTemperature, WeatherConditions, WeatherTable, WeatherCardBody, WeatherInfoMain };

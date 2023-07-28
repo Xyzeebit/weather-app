@@ -1,4 +1,4 @@
-import { CardHeader, WeatherCard, WeatherInfoMain } from "./WeatherInfo";
+import {  WeatherCard, WeatherCardBody, WeatherCardTemperature, WeatherConditions, WeatherInfoMain, WeatherTable } from "./WeatherInfo";
 import { getLocation, getMainWeatherFromDays } from "../libs";
 
 const WeatherInfoList = () => {
@@ -11,9 +11,17 @@ const WeatherInfoList = () => {
       <div className="mt-10 flex flex-col justify-center items-center">
         {data.map((weather, i) => {
           if (i !== 0) {
+            console.log(weather)
             return (
               <WeatherCard key={weather.id}>
-                <CardHeader city={city} country={country} />
+                <WeatherCardBody>
+                  <WeatherCardTemperature
+                    temperature={weather.temperature}
+                    time={weather.datetime}
+                  />
+                  <WeatherTable weather={weather} />
+                </WeatherCardBody>
+                <WeatherConditions conditions={weather.description} />
               </WeatherCard>
             );
           }
