@@ -67,28 +67,28 @@ TableRow.propTypes = {
 
 const TableItems = ({ weather, multiple }) => (
   <>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {multiple ? weather.datetime : weather.time}
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.temperature} ℃
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.feelslike} ℃
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.humidity}%
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.windspeed} kmh
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.visibility}%
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.sunrise ? weather.sunrise + " AM" : "N/A"}
     </td>
-    <td className="border px-4 py-2 text-center text-gray-600">
+    <td className="border p-2 text-center text-gray-600">
       {weather.sunrise ? weather.sunrise + " PM" : "N/A"}
     </td>
   </>
@@ -131,21 +131,24 @@ const TableIcons = () => (
 const WeatherInfoMain = ({ location, weather }) => {
   return (
     <div className="bg-white px-4 md:px-24 py-1 md:py-8 md:flex md:justify-between md:items-start border-box">
-      <div>
+      <div className="md:w-1/3">
         <div>
-          <img src={stormImage} alt={weather.icon} width={250} height={180} />
-          <div className="font-bold text-3xl md:text-6xl text-gray-600">
-            {weather.temperature}℃
+          <img src={stormImage} alt={weather.icon} width={250} height={180} className='m-auto' />
+          <div className="mt-4">
+            <span className="font-bold text-red-400">Feels like</span>
+            <span className="font-bold text-5xl md:text-6xl text-gray-600">
+              {weather.feelslike}°C
+            </span>
           </div>
         </div>
-        <div className="pt-4">
-          <div className="font-bold text-2xl text-gray-600">
-            {weather.conditions}
+        <div className="pt-4 md:pt-8 lg:pt-4 md:w-64 leading-tight">
+          <div className="font-bold text-2xl text-gray-600 border-t border-t-2">
+            {weather.description}
           </div>
         </div>
       </div>
 
-      <div>
+      <div className="mt-10 md:mt-0 md:w-2/3 lg:w-10/12">
         <div className="flex-row">
           <div className="flex items-center justify-end">
             <img
@@ -165,32 +168,32 @@ const WeatherInfoMain = ({ location, weather }) => {
           )}
         </div>
 
-        <div className="pt-10">
-          <table className="table-auto">
+        <div className="pt-10 md:ml-10 lg:ml-0 w-full overflow-x-auto">
+          <table className="table-auto w-full">
             <thead>
               <TableRow>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Time
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Temperature
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Feels like
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Humidity
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Wind speed
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Visibility
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Sun rise
                 </th>
-                <th className="border border-gray-500 bg-gray-200 px-4 py-2">
+                <th className="border border-blue-500 bg-gray-200 px-4 py-2">
                   Sun set
                 </th>
               </TableRow>
@@ -200,7 +203,7 @@ const WeatherInfoMain = ({ location, weather }) => {
                 <TableIcons />
               </TableRow>
               <TableRow>
-                <TableItems weather={weather} />
+                <TableItems weather={weather} multiple={false} />
               </TableRow>
               {weather?.hours.length > 0 && (
                 <>

@@ -21,7 +21,7 @@ function getWeatherReport(wea) {
     const d = new Date(wea.datetimeEpoch);
 
     w["id"] = wea.datetimeEpoch;
-    w["time"] = d.getHours() + ' : ' + d.getMinutes();
+    w["time"] = d.getHours() + ':00:00';
     w["datetime"] = wea.datetime;
     w["temperature"] = wea.temp;
     w["feelslike"] = wea.feelslike;
