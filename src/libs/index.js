@@ -11,6 +11,19 @@ export function getLocation() {
 }
 
 /**
+ * normalizeDate function converts a date string into a month and day string
+ * @param {String} date 
+ * @returns {String}
+ */
+function normalizeDate(date) {
+    const [y, d, m] = date.split('-');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = m.startsWith('0') ? m.substring(1) : m;
+    const str = `${months[month - 1]}, ${d}`;
+    return str;
+}
+
+/**
  * getWeatherReport function takes an object, parses it for a weather
  * report and recursively calls itself for every hour object found in each days report
  * @param {object} wea - weather JSON object parameter
@@ -19,7 +32,7 @@ export function getLocation() {
 function getWeatherReport(wea) {
     const w = {};
     const d = new Date(wea.datetimeEpoch);
-
+    
     w["id"] = wea.datetimeEpoch;
     w["time"] = d.getHours() + ':00:00';
     w["datetime"] = wea.datetime;

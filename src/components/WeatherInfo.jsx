@@ -24,7 +24,7 @@ const WeatherCard = ({ children }) => {
         );
     } else {
         return (
-            <div className='w-full md:w-4/5 bg-slate-50 rounded shadow-md mb-8'>
+            <div className='w-full md:w-4/5 bg-slate-50 rounded shadow-md mb-10'>
                {children}
             </div>
         );
@@ -42,7 +42,7 @@ const WeatherCardTemperature = ({ temperature, time }) => (
       <div className="font-extrabold text-6xl text-blue-500">
         {temperature}°C
       </div>
-      <div className="font-bold text-xl text-center text-red-400 p-1 mt-10 bg-gray-200 rounded-lg rotate-15">
+      <div className="font-bold text-xl text-center text-red-400 p-1 mt-10 bg-gray-200 rounded-lg">
         {time}
       </div>
     </div>

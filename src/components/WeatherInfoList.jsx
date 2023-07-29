@@ -11,7 +11,7 @@ const WeatherInfoList = () => {
       <div className="mt-10 flex flex-col justify-center items-center">
         {data.map((weather, i) => {
           if (i !== 0) {
-            console.log(weather)
+            console.log(weather.icon)
             return (
               <WeatherCard key={weather.id}>
                 <WeatherCardBody>

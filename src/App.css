@@ -1,3 +1,13 @@
 .rotate-15 {
     transform: rotate(15deg);
 }
+
+.spin {
+    animation: rotate 1s linear infinite both;
+    -webkit-animation: rotate 1s linear infinite both;
+}
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
