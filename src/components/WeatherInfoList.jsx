@@ -18,6 +18,7 @@ const WeatherInfoList = () => {
                   <WeatherCardTemperature
                     temperature={weather.temperature}
                     time={weather.datetime}
+                    icon={weather.icon}
                   />
                   <WeatherTable weather={weather} />
                 </WeatherCardBody>

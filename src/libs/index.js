@@ -1,4 +1,10 @@
 import weather from '../data.json';
+import rainCloud from '../assets/rain.png'
+import cloudyCloud from '../assets/cloudy.png'
+import partlyCloud from '../assets/cloud.png'
+import clearDay from '../assets/clear-day.png' // use sun image
+import clearNight from '../assets/clear-night.png'
+import thunderStorm from '../assets/storm.png'
 
 /**
  * getLocation function parses the weather json data and returns the current 
@@ -21,6 +27,26 @@ function normalizeDate(date) {
     const month = m.startsWith('0') ? m.substring(1) : m;
     const str = `${months[month - 1]}, ${d}`;
     return str;
+}
+
+function iconImage(icon) {
+    const s = icon.toLowerCase();
+    if (s === 'rain') {
+        return rainCloud;
+    }
+    if (s === 'cloudy') {
+        return cloudyCloud;
+    }
+    if (s.startsWith('partly')) {
+        return partlyCloud;
+    }
+    if (s === 'clear-day') {
+        return clearDay;
+    }
+    if (s == 'clear-night') {
+        return clearNight;
+    }
+    return thunderStorm;
 }
 
 /**
@@ -49,7 +75,7 @@ function getWeatherReport(wea) {
     w["sunset"] = wea.sunset ?? weather.days[0].sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
-    w["icon"] = wea.icon;
+    w["icon"] = iconImage(wea.icon);
 
     if (wea.hours && wea.hours.length > 0) {
         w["hours"] = [];

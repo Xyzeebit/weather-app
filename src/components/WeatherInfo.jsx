@@ -35,9 +35,9 @@ WeatherCard.propTypes = {
     children: PropsType.node.isRequired
 }
 
-const WeatherCardTemperature = ({ temperature, time }) => (
+const WeatherCardTemperature = ({ temperature, time, icon }) => (
   <div className="flex items-center justify-start py-8">
-    <img src={tempIcon} alt="" width={150} height={200} />
+    <img src={icon} alt="" width={150} height={200} />
     <div className="">
       <div className="font-extrabold text-6xl text-blue-500">
         {temperature}°C
@@ -50,7 +50,8 @@ const WeatherCardTemperature = ({ temperature, time }) => (
 );
 WeatherCardTemperature.propTypes = {
   temperature: PropsType.number.isRequired,
-  time: PropsType.string
+  time: PropsType.string,
+  icon: PropsType.string
 };
 
 const WeatherConditions = ({ conditions }) => (
@@ -186,7 +187,7 @@ const WeatherInfoMain = ({ location, weather }) => {
     <div className="bg-white px-4 md:px-24 py-1 md:py-8 md:flex md:justify-between md:items-start border-box">
       <div className="md:w-1/3">
         <div>
-          <img src={stormImage} alt={weather.icon} width={250} height={180} className='m-auto' />
+          <img src={weather.icon} alt={weather.icon} width={250} height={180} className='m-auto' />
           <div className="mt-4">
             <span className="font-bold text-red-400">Feels Like</span>
             <span className="font-bold text-5xl md:text-6xl text-blue-500">
