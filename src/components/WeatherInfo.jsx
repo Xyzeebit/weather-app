@@ -1,8 +1,6 @@
 import PropsType from 'prop-types';
-import { useState } from 'react';
-import Loader from './Loader';
 
-import stormImage from '../assets/storm.png';
+// import stormImage from '../assets/storm.png';
 import locationImage from '../assets/location.png';
 import timeIcon from '../assets/moon-dark.png'
 import humidityIcon from "../assets/humidity.png";
@@ -17,18 +15,11 @@ import airPressureIcon from "../assets/air.png";
 
 
 const WeatherCard = ({ children }) => {
-    const [loading] = useState(false);
-    if (loading) {
-        return (
-            <Loader />
-        );
-    } else {
-        return (
-            <div className='w-full md:w-4/5 bg-slate-50 rounded shadow-md mb-10'>
-               {children}
-            </div>
-        );
-    }
+   return (
+     <div className="w-full md:w-4/5 bg-slate-50 rounded shadow-md mb-10">
+       {children}
+     </div>
+   );
 }
 
 WeatherCard.propTypes = {

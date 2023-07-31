@@ -18,7 +18,7 @@ const SearchBox = () => {
           value={value}
           onChange={handleOnChange}
           placeholder="Enter city name for weather report"
-          className="pl-4 w-full lg:w-1/2 h-12 rounded-full appearance-none border-2 text-gray-700 leading-tight bg-gray-100 focus:bg-white focus:outline-none focus:shadow-outline focus:border-blue-500"
+          className="pl-6 w-full lg:w-1/2 h-12 rounded-full appearance-none border-2 text-gray-700 leading-tight bg-gray-100 focus:bg-white focus:outline-none focus:shadow-outline focus:border-blue-500"
         />
       </form>
     );
