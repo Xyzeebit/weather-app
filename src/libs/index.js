@@ -6,6 +6,22 @@ import clearDay from '../assets/clear-day.png' // use sun image
 import clearNight from '../assets/clear-night.png'
 import thunderStorm from '../assets/storm.png'
 
+export async function fetchWeatherReport(place) {
+    const URL = '';
+    try {
+        const resp = await fetch(URL);
+        if (resp.ok) {
+            const data = await resp.json();
+            // check if response data object contains weather report
+            return { ok: true, data };
+        } else {
+            return { ok: false, error: 'cannot find weather report for ' + place };
+        }
+    } catch (err) {
+        return { ok: false, error: 'unable to connect, please try again' };
+    }
+}
+
 /**
  * getLocation function parses the weather json data and returns the current 
  * searched location

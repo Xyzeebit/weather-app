@@ -1,23 +1,46 @@
-import {  WeatherCard, WeatherCardBody, WeatherCardTemperature, WeatherConditions, WeatherInfoMain, WeatherTable } from "./WeatherInfo";
-import { getLocation, getMainWeatherFromDays } from "../libs";
+import {
+  WeatherCard,
+  WeatherCardBody,
+  WeatherCardTemperature,
+  WeatherConditions,
+  WeatherInfoMain,
+  WeatherTable
+} from "./WeatherInfo";
+import { fetchWeatherReport, getLocation } from "../libs";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { updateWeather } from "../redux/weatherSlice";
 import SkeletonLoader from "./SkeletonLoader";
+import Error from "./Error";
 
 const WeatherInfoList = () => {
-  const [loading, setLoading] = useState(true);
-  const { city, country } = getLocation();
-  const data = getMainWeatherFromDays();
+  const { loading, error, data } = useSelector(state => state.weather);
+  const dispatch = useDispatch();
+  const [{ city, country }, setLocation] = useState({ city: '', country: '' });
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
-  }, []);
+    async function fetchData() {
+      const result = await fetchWeatherReport("berlin");
+      dispatch(updateWeather(result));
+    }
 
+    fetchData();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (data) {
+      setLocation(getLocation(data))
+    }
+  }, [data]);
+ 
   if (loading) {
     return (
       <SkeletonLoader />
     );
+  } else if (error) {
+    return (
+      <Error message={error} />
+    )
   } else {
     return (
       <>
