@@ -7,28 +7,42 @@ import clearNight from '../assets/clear-night.png'
 import thunderStorm from '../assets/storm.png'
 
 export async function fetchWeatherReport(place) {
-    const URL = '';
     try {
+        const apiKey = import.meta.env.VITE_WEATHER_KEY;
+        if (!apiKey) {
+            throw new Error('No API key provided');
+        }
+        const today = new Date();
+        const from = today.toISOString().split('T')[0];
+        today.setDate(today.getDate() + 7);
+        const to = today.toISOString().split('T')[0];
+
+        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${place ? place : 'London'}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
         const resp = await fetch(URL);
         if (resp.ok) {
             const data = await resp.json();
+            const report = getMainWeatherFromDays(data);
             // check if response data object contains weather report
-            return { ok: true, data };
+            return { ok: true, weather: report };
         } else {
             return { ok: false, error: 'cannot find weather report for ' + place };
         }
     } catch (err) {
-        return { ok: false, error: 'unable to connect, please try again' };
+        const report = getMainWeatherFromDays(weather);
+        return { ok: true, weather: report };
+        // return { ok: false, error: 'unable to connect, please try again' };
     }
 }
 
 /**
  * getLocation function parses the weather json data and returns the current 
  * searched location
+ * @param {object} addr 
  * @returns {object}
  */
-export function getLocation() {
-    const [city, country] = weather.resolvedAddress.split(',');
+export function getLocation(addr) {
+    if (addr == undefined) return { city: '', country: '' };
+    const [city, country] = addr.split(',');
     return {city, country};
 }
 
@@ -37,8 +51,11 @@ export function getLocation() {
  * @param {String} date 
  * @returns {String}
  */
-function normalizeDate(date) {
-    const [y, d, m] = date.split('-');
+function normalizeDate(datetime) {
+    if (datetime.indexOf('-') === -1) {
+        return datetime;
+    }
+    const [y, m, d] = datetime.split('-');
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const month = m.startsWith('0') ? m.substring(1) : m;
     const str = `${months[month - 1]}, ${d}`;
@@ -46,7 +63,7 @@ function normalizeDate(date) {
 }
 
 function iconImage(icon) {
-    const s = icon.toLowerCase();
+    const s = icon?.toLowerCase();
     if (s === 'rain') {
         return rainCloud;
     }
@@ -74,10 +91,11 @@ function iconImage(icon) {
 function getWeatherReport(wea) {
     const w = {};
     const d = new Date(wea.datetimeEpoch);
-    
+    const s = d.toISOString().split("T")[1];
     w["id"] = wea.datetimeEpoch;
-    w["time"] = d.getHours() + ':00:00';
-    w["datetime"] = wea.datetime;
+    w["time"] = s.substring(0, s.lastIndexOf('.'));
+    w["resolvedAddress"] = getLocation(wea.resolvedAddress);
+    w["datetime"] = normalizeDate(wea.datetime);
     w["temperature"] = wea.temp;
     w["feelslike"] = wea.feelslike;
     w["dew"] = wea.dew;

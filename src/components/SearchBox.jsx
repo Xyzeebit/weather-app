@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import searchIcon from '../assets/search.svg';
 
 const SearchBox = () => {
     const [value, setValue] = useState('');

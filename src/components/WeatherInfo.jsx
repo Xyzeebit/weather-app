@@ -45,10 +45,10 @@ WeatherCardTemperature.propTypes = {
   icon: PropsType.string
 };
 
-const WeatherConditions = ({ conditions }) => (
+const WeatherCardFooter = ({ conditions }) => (
   <div className='bg-blue-600 text-white px-8 py-4 font-light text-lg'>{conditions}</div>
 );
-WeatherConditions.propTypes = {
+WeatherCardFooter.propTypes = {
   conditions: PropsType.string.isRequired
 }
 
@@ -275,4 +275,4 @@ WeatherInfoMain.propTypes = {
   weather: PropsType.object
 }
 
-export { WeatherCard, WeatherCardTemperature, WeatherConditions, WeatherTable, WeatherCardBody, WeatherInfoMain };
+export { WeatherCard, WeatherCardTemperature, WeatherCardFooter, WeatherTable, WeatherCardBody, WeatherInfoMain };

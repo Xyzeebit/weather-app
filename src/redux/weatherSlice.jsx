@@ -10,8 +10,8 @@ export const weatherSlice = createSlice({
     name: 'weather',
     initialState,
     reducers: {
-        updateWeather: (state, { type, payload }) => {
-            if (type === "weather/updateWeather" && payload.ok) {
+        updateWeather: (state, { payload }) => {
+            if (payload.ok) {
                 state.data = payload.weather;
                 state.loading = false;
                 state.error = null;
