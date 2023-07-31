@@ -80,14 +80,14 @@ const WeatherTable = ({ weather }) => (
         <img src={airPressureIcon} alt="" width={20} height={30} />
         <span className="pl-4">Pressure</span>
       </div>
-      <span>{weather.pressure}</span>
+      <span>{weather.pressure} mb</span>
     </div>
     <div className="flex items-center justify-between py-2 px-8">
       <div className="inline-flex">
         <img src={visibilityIcon} alt="" width={20} height={20} />
         <span className="pl-4">Visibility</span>
       </div>
-      <span>{weather.visibility}</span>
+      <span>{weather.visibility} km</span>
     </div>
   </div>
 );
@@ -187,7 +187,7 @@ const WeatherInfoMain = ({ location, weather }) => {
           </div>
         </div>
         <div className="pt-4 md:pt-8 lg:pt-4 md:w-64 leading-tight">
-          <div className="font-light text-xl text-gray-600 border-t border-t-2">
+          <div className="font-light text-xl text-gray-600 border-t-2">
             {weather.description}
           </div>
         </div>

@@ -10,7 +10,7 @@ const WeatherInfoList = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // setLoading(false);
+      setLoading(false);
     }, 5000);
   }, []);
 
