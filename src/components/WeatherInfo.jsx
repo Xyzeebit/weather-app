@@ -128,7 +128,7 @@ const TableItems = ({ weather, multiple }) => (
       {weather.windspeed} kmh
     </td>
     <td className="border p-2 text-center text-gray-600">
-      {weather.visibility}%
+      {weather.visibility} km
     </td>
     <td className="border p-2 text-center text-gray-600">
       {weather.sunrise ? weather.sunrise + " AM" : "N/A"}

@@ -21,15 +21,20 @@ export async function fetchWeatherReport(place) {
         const resp = await fetch(URL);
         if (resp.ok) {
             const data = await resp.json();
+            let location = {};
+            if (data.resolvedAddress) {
+                const { city, country } = getLocation(data.resolvedAddress);
+                location = { city, country };
+            }
             const report = getMainWeatherFromDays(data);
             // check if response data object contains weather report
-            return { ok: true, weather: report };
+            return { ok: true, weather: {report, location} };
         } else {
             return { ok: false, error: 'cannot find weather report for ' + place };
         }
     } catch (err) {
-        const report = getMainWeatherFromDays(weather);
-        return { ok: true, weather: report };
+        // const report = getMainWeatherFromDays(weather);
+        return { ok: false, error: "Unable to connect, please check your internet connection" };
         // return { ok: false, error: 'unable to connect, please try again' };
     }
 }
@@ -41,9 +46,8 @@ export async function fetchWeatherReport(place) {
  * @returns {object}
  */
 export function getLocation(addr) {
-    if (addr == undefined) return { city: '', country: '' };
     const [city, country] = addr.split(',');
-    return {city, country};
+    return { city, country };
 }
 
 /**
@@ -94,7 +98,6 @@ function getWeatherReport(wea) {
     const s = d.toISOString().split("T")[1];
     w["id"] = wea.datetimeEpoch;
     w["time"] = s.substring(0, s.lastIndexOf('.'));
-    w["resolvedAddress"] = getLocation(wea.resolvedAddress);
     w["datetime"] = normalizeDate(wea.datetime);
     w["temperature"] = wea.temp;
     w["feelslike"] = wea.feelslike;
@@ -126,7 +129,7 @@ function getWeatherReport(wea) {
  * getMainWeatherFromDays function parses the weather object for a weather report and
  * returns an array of weather report objects
  */
-export function getMainWeatherFromDays() {
+export function getMainWeatherFromDays(weather) {
     const days = [];
     for (let w of weather.days) {
         const report = getWeatherReport(w);

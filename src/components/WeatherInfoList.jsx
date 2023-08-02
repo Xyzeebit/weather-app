@@ -41,9 +41,9 @@ const WeatherInfoList = () => {
   } else {
     return (
       <>
-        <WeatherInfoMain location={data[0].resolvedAddress} weather={data[0]} />
+        <WeatherInfoMain location={{ city: data.location.city, country: data.location.country }} weather={data.report[0]} />
         <div className="mt-10 flex flex-col justify-center items-center">
-          {data.map((weather, i) => {
+          {data.report.map((weather, i) => {
             if (i !== 0) {
               return (
                 <WeatherCard key={weather.id}>
