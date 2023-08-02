@@ -2,11 +2,11 @@ import PropsType from 'prop-types';
 
 // import stormImage from '../assets/storm.png';
 import locationImage from '../assets/location.png';
-import timeIcon from '../assets/moon-dark.png'
+import timeIcon from '../assets/clock.png'
 import humidityIcon from "../assets/humidity.png";
 import tempIcon from "../assets/temperature.png";
 import tempFeelsIcon from '../assets/hot.png'
-import windIcon from "../assets/wind.png";
+import windIcon from "../assets/anemometer.png";
 import visibilityIcon from "../assets/visibility.png";
 import sunriseIcon from "../assets/sunset.png";
 import sunsetIcon from "../assets/sunset.png";
@@ -28,7 +28,7 @@ WeatherCard.propTypes = {
 
 const WeatherCardTemperature = ({ temperature, time, icon }) => (
   <div className="flex items-center justify-start py-8">
-    <img src={icon} alt="" width={150} height={200} />
+    <img src={`/icons/${icon}.svg`} alt="" width={150} height={200} />
     <div className="">
       <div className="font-extrabold text-6xl text-blue-500">
         {temperature}°C
@@ -178,8 +178,8 @@ const WeatherInfoMain = ({ location, weather }) => {
     <div className="bg-white px-4 md:px-24 py-1 md:py-8 md:flex md:justify-between md:items-start border-box">
       <div className="md:w-1/3">
         <div>
-          <img src={weather.icon} alt={weather.icon} width={250} height={180} className='m-auto' />
-          <div className="mt-4">
+          <img src={`/icons/${weather.icon}.svg`} alt={weather.icon} width={250} height={180} className='m-auto' />
+          <div className="mt-4 flex flex-col">
             <span className="font-bold text-red-400">Feels Like</span>
             <span className="font-bold text-5xl md:text-6xl text-blue-500">
               {weather.feelslike}°C
@@ -252,13 +252,19 @@ const WeatherInfoMain = ({ location, weather }) => {
               </TableRow>
               {weather?.hours.length > 0 && (
                 <>
-                  {weather.hours.map((weather, i) => {
-                    if (i > 4) return;
-                    return (
-                      <TableRow key={weather.id}>
-                        <TableItems weather={weather} multiple={true} />
-                      </TableRow>
-                    );
+                  {weather.hours.map((weather) => {
+                    // current hour
+                    const d = new Date();
+                    const s = d.toISOString().split("T")[1];
+                    const t = s.substring(0, s.lastIndexOf("."));
+
+                    if (weather.datetime >= t) {
+                      return (
+                        <TableRow key={weather.id}>
+                          <TableItems weather={weather} multiple={true} />
+                        </TableRow>
+                      );
+                    }
                   })}
                 </>
               )}

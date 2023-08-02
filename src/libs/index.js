@@ -1,10 +1,10 @@
 import weather from '../data.json';
-import rainCloud from '../assets/rain.png'
-import cloudyCloud from '../assets/cloudy.png'
-import partlyCloud from '../assets/cloud.png'
-import clearDay from '../assets/clear-day.png' // use sun image
-import clearNight from '../assets/clear-night.png'
-import thunderStorm from '../assets/storm.png'
+// import rainCloud from '../assets/rain.png'
+// import cloudyCloud from '../assets/cloudy.png'
+// import partlyCloud from '../assets/cloud.png'
+// import clearDay from '../assets/clear-day.png' // use sun image
+// import clearNight from '../assets/clear-night.png'
+// import thunderStorm from '../assets/storm.png'
 
 export async function fetchWeatherReport(place) {
     try {
@@ -26,16 +26,21 @@ export async function fetchWeatherReport(place) {
                 const { city, country } = getLocation(data.resolvedAddress);
                 location = { city, country };
             }
-            const report = getMainWeatherFromDays(data);
+            const days = getMainWeatherFromDays(data);
             // check if response data object contains weather report
-            return { ok: true, weather: {report, location} };
+            return { ok: true, weather: {days, location} };
         } else {
             return { ok: false, error: 'cannot find weather report for ' + place };
         }
     } catch (err) {
-        // const report = getMainWeatherFromDays(weather);
-        return { ok: false, error: "Unable to connect, please check your internet connection" };
-        // return { ok: false, error: 'unable to connect, please try again' };
+         let location = {};
+         if (weather.resolvedAddress) {
+           const { city, country } = getLocation(weather.resolvedAddress);
+           location = { city, country };
+         }
+        const days = getMainWeatherFromDays(weather);
+        return { ok: true, weather: { days, location} };
+        // return { ok: false, error: 'Unable to connect, please try again' };
     }
 }
 
@@ -68,22 +73,42 @@ function normalizeDate(datetime) {
 
 function iconImage(icon) {
     const s = icon?.toLowerCase();
-    if (s === 'rain') {
-        return rainCloud;
+    switch (s) {
+        case 'snow':
+            return;
+        case 'snow-showers-day':
+            return;
+        case 'snow-showers-night':
+            return;
+        case 'thunder-rain':
+            return;
+        case 'thunder-showers-day':
+            return;
+        case 'thunder-showers-night':
+            return;
+        case 'rain':
+            return;
+        case 'showers-day':
+            return;
+        case 'showers-night':
+            return;
+        case 'fog':
+            return;
+        case 'wind':
+            return;
+        case 'cloudy':
+            return;
+        case 'partly-cloudy-day':
+            return;
+        case 'partly-cloudy-night':
+            return;
+        case 'clear-day':
+            return;
+        case 'clear-night':
+            return;
+        default:
+            return ''
     }
-    if (s === 'cloudy') {
-        return cloudyCloud;
-    }
-    if (s.startsWith('partly')) {
-        return partlyCloud;
-    }
-    if (s === 'clear-day') {
-        return clearDay;
-    }
-    if (s == 'clear-night') {
-        return clearNight;
-    }
-    return thunderStorm;
 }
 
 /**
@@ -94,7 +119,7 @@ function iconImage(icon) {
  */
 function getWeatherReport(wea) {
     const w = {};
-    const d = new Date(wea.datetimeEpoch);
+    const d = new Date();
     const s = d.toISOString().split("T")[1];
     w["id"] = wea.datetimeEpoch;
     w["time"] = s.substring(0, s.lastIndexOf('.'));
@@ -112,7 +137,7 @@ function getWeatherReport(wea) {
     w["sunset"] = wea.sunset ?? weather.days[0].sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
-    w["icon"] = iconImage(wea.icon);
+    w["icon"] = wea.icon; //iconImage(wea.icon);
 
     if (wea.hours && wea.hours.length > 0) {
         w["hours"] = [];
