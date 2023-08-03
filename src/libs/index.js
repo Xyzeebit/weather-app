@@ -1,4 +1,4 @@
-import weather from '../data.json';
+// import weather from '../data.json';
 // import rainCloud from '../assets/rain.png'
 // import cloudyCloud from '../assets/cloudy.png'
 // import partlyCloud from '../assets/cloud.png'
@@ -16,8 +16,18 @@ export async function fetchWeatherReport(place) {
         const from = today.toISOString().split('T')[0];
         today.setDate(today.getDate() + 7);
         const to = today.toISOString().split('T')[0];
+        let city = 'Lagos';
 
-        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${place ? place : 'London'}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
+        if (place === undefined) {
+            let loc = await getDefaultLocation();
+            if (loc.ok) {
+              city = loc.location.city;
+            }
+        } else {
+            city = place;
+        }
+        
+        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
         const resp = await fetch(URL);
         if (resp.ok) {
             const data = await resp.json();
@@ -31,6 +41,42 @@ export async function fetchWeatherReport(place) {
             return { ok: true, weather: {days, location} };
         } else {
             return { ok: false, error: 'cannot find weather report for ' + place };
+        }
+    } catch (err) {
+        //  let location = {};
+        //  if (weather.resolvedAddress) {
+        //    const { city, country } = getLocation(weather.resolvedAddress);
+        //    location = { city, country };
+        //  }
+        //  const days = getMainWeatherFromDays(weather);
+        //  // check if response data object contains weather report
+        //  return { ok: true, weather: { days, location } };
+        return { ok: false, error: 'Unable to connect, please try again' };
+    }
+}
+
+/**
+ * getDefaultLocation function fetches the IP geo-location of the user in other to get 
+ * the users city and country
+ * @returns {object}
+ */
+async function getDefaultLocation() {
+    try {
+        const apiKey = import.meta.env.VITE_GEOAPIFY_KEY;
+        if (apiKey) {
+            const URL = `https://api.geoapify.com/v1/ipinfo?&apiKey=${apiKey}`
+            const resp = await fetch(URL);
+            if (resp.ok) {
+                const location = {};
+                const data = await resp.json();
+                location.city = data.city.name;
+                location.country = data.country.name;
+                return { ok: true, location }
+            } else {
+                return { ok: false, error: 'Cannot get your location' };
+            }
+        } else {
+            throw new Error('API key not found')
         }
     } catch (err) {
         return { ok: false, error: 'Unable to connect, please try again' };
@@ -126,8 +172,8 @@ function getWeatherReport(wea) {
     w["cloudcover"] = wea.cloudcover;
     w["visibility"] = wea.visibility;
     w["uvindex"] = wea.uvindex;
-    w["sunrise"] = wea.sunrise ?? weather.days[0].sunrise;
-    w["sunset"] = wea.sunset ?? weather.days[0].sunset;
+    w["sunrise"] = wea.sunrise;
+    w["sunset"] = wea.sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
     w["icon"] = wea.icon; //iconImage(wea.icon);
