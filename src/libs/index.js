@@ -16,8 +16,16 @@ export async function fetchWeatherReport(place) {
         const from = today.toISOString().split('T')[0];
         today.setDate(today.getDate() + 7);
         const to = today.toISOString().split('T')[0];
+        let location = place;
 
-        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${place ? place : 'London'}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
+        if (place === undefined) {
+            location = getDefaultLocation();
+        }
+        let city = 'Lagos'
+        if (location.ok) {
+            location.city;
+        }
+        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
         const resp = await fetch(URL);
         if (resp.ok) {
             const data = await resp.json();
@@ -41,6 +49,34 @@ export async function fetchWeatherReport(place) {
         //  const days = getMainWeatherFromDays(weather);
         //  // check if response data object contains weather report
         //  return { ok: true, weather: { days, location } };
+        return { ok: false, error: 'Unable to connect, please try again' };
+    }
+}
+
+/**
+ * getDefaultLocation function fetches the IP geo-location of the user in other to get 
+ * the users city and country
+ * @returns {object}
+ */
+async function getDefaultLocation() {
+    try {
+        const apiKey = import.meta.env.VITE_GEOAPIFY_KEY;
+        if (apiKey) {
+            const URL = `https://api.geoapify.com/v1/ipinfo?&apiKey=${apiKey}`
+            const resp = await fetch(URL);
+            if (resp.ok) {
+                const location = {};
+                const data = await resp.json();
+                location.city = data.city.name;
+                location.country = data.country.name;
+                return { ok: true, location }
+            } else {
+                return { ok: false, error: 'Cannot get your location' };
+            }
+        } else {
+            throw new Error('API key not found')
+        }
+    } catch (err) {
         return { ok: false, error: 'Unable to connect, please try again' };
     }
 }

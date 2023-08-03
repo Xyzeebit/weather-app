@@ -20,7 +20,7 @@ const WeatherInfoList = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchWeatherReport("Lagos");
+      const result = await fetchWeatherReport();
       dispatch(updateWeather(result));
     }
 
