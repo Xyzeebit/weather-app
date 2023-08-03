@@ -119,7 +119,7 @@ function iconImage(icon) {
  */
 function getWeatherReport(wea) {
     const w = {};
-    const d = new Date();
+    const d = new Date(wea.datetimeEpoch);
     const s = d.toISOString().split("T")[1];
     w["id"] = wea.datetimeEpoch;
     w["time"] = s.substring(0, s.lastIndexOf('.'));

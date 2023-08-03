@@ -8,7 +8,7 @@ import tempIcon from "../assets/temperature.png";
 import tempFeelsIcon from '../assets/hot.png'
 import windIcon from "../assets/anemometer.png";
 import visibilityIcon from "../assets/visibility.png";
-import sunriseIcon from "../assets/sunset.png";
+import sunriseIcon from "../assets/sunrise.png";
 import sunsetIcon from "../assets/sunset.png";
 import airPressureIcon from "../assets/air.png";
 
