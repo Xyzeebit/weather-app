@@ -1,19 +1,51 @@
 import weather from '../data.json';
-import rainCloud from '../assets/rain.png'
-import cloudyCloud from '../assets/cloudy.png'
-import partlyCloud from '../assets/cloud.png'
-import clearDay from '../assets/clear-day.png' // use sun image
-import clearNight from '../assets/clear-night.png'
-import thunderStorm from '../assets/storm.png'
+// import rainCloud from '../assets/rain.png'
+// import cloudyCloud from '../assets/cloudy.png'
+// import partlyCloud from '../assets/cloud.png'
+// import clearDay from '../assets/clear-day.png' // use sun image
+// import clearNight from '../assets/clear-night.png'
+// import thunderStorm from '../assets/storm.png'
+
+export async function fetchWeatherReport(place) {
+    try {
+        const apiKey = import.meta.env.VITE_WEATHER_KEY;
+        if (!apiKey) {
+            throw new Error('No API key provided');
+        }
+        const today = new Date();
+        const from = today.toISOString().split('T')[0];
+        today.setDate(today.getDate() + 7);
+        const to = today.toISOString().split('T')[0];
+
+        const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${place ? place : 'London'}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
+        const resp = await fetch(URL);
+        if (resp.ok) {
+            const data = await resp.json();
+            let location = {};
+            if (data.resolvedAddress) {
+                const { city, country } = getLocation(data.resolvedAddress);
+                location = { city, country };
+            }
+            const days = getMainWeatherFromDays(data);
+            // check if response data object contains weather report
+            return { ok: true, weather: {days, location} };
+        } else {
+            return { ok: false, error: 'cannot find weather report for ' + place };
+        }
+    } catch (err) {
+        return { ok: false, error: 'Unable to connect, please try again' };
+    }
+}
 
 /**
  * getLocation function parses the weather json data and returns the current 
  * searched location
+ * @param {object} addr 
  * @returns {object}
  */
-export function getLocation() {
-    const [city, country] = weather.resolvedAddress.split(',');
-    return {city, country};
+export function getLocation(addr) {
+    const [city, country] = addr.split(',');
+    return { city, country };
 }
 
 /**
@@ -21,8 +53,11 @@ export function getLocation() {
  * @param {String} date 
  * @returns {String}
  */
-function normalizeDate(date) {
-    const [y, d, m] = date.split('-');
+function normalizeDate(datetime) {
+    if (datetime.indexOf('-') === -1) {
+        return datetime;
+    }
+    const [y, m, d] = datetime.split('-');
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const month = m.startsWith('0') ? m.substring(1) : m;
     const str = `${months[month - 1]}, ${d}`;
@@ -30,23 +65,43 @@ function normalizeDate(date) {
 }
 
 function iconImage(icon) {
-    const s = icon.toLowerCase();
-    if (s === 'rain') {
-        return rainCloud;
+    const s = icon?.toLowerCase();
+    switch (s) {
+        case 'snow':
+            return;
+        case 'snow-showers-day':
+            return;
+        case 'snow-showers-night':
+            return;
+        case 'thunder-rain':
+            return;
+        case 'thunder-showers-day':
+            return;
+        case 'thunder-showers-night':
+            return;
+        case 'rain':
+            return;
+        case 'showers-day':
+            return;
+        case 'showers-night':
+            return;
+        case 'fog':
+            return;
+        case 'wind':
+            return;
+        case 'cloudy':
+            return;
+        case 'partly-cloudy-day':
+            return;
+        case 'partly-cloudy-night':
+            return;
+        case 'clear-day':
+            return;
+        case 'clear-night':
+            return;
+        default:
+            return ''
     }
-    if (s === 'cloudy') {
-        return cloudyCloud;
-    }
-    if (s.startsWith('partly')) {
-        return partlyCloud;
-    }
-    if (s === 'clear-day') {
-        return clearDay;
-    }
-    if (s == 'clear-night') {
-        return clearNight;
-    }
-    return thunderStorm;
 }
 
 /**
@@ -58,10 +113,10 @@ function iconImage(icon) {
 function getWeatherReport(wea) {
     const w = {};
     const d = new Date(wea.datetimeEpoch);
-    
+    const s = d.toISOString().split("T")[1];
     w["id"] = wea.datetimeEpoch;
-    w["time"] = d.getHours() + ':00:00';
-    w["datetime"] = wea.datetime;
+    w["time"] = s.substring(0, s.lastIndexOf('.'));
+    w["datetime"] = normalizeDate(wea.datetime);
     w["temperature"] = wea.temp;
     w["feelslike"] = wea.feelslike;
     w["dew"] = wea.dew;
@@ -75,7 +130,7 @@ function getWeatherReport(wea) {
     w["sunset"] = wea.sunset ?? weather.days[0].sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
-    w["icon"] = iconImage(wea.icon);
+    w["icon"] = wea.icon; //iconImage(wea.icon);
 
     if (wea.hours && wea.hours.length > 0) {
         w["hours"] = [];
@@ -92,7 +147,7 @@ function getWeatherReport(wea) {
  * getMainWeatherFromDays function parses the weather object for a weather report and
  * returns an array of weather report objects
  */
-export function getMainWeatherFromDays() {
+export function getMainWeatherFromDays(weather) {
     const days = [];
     for (let w of weather.days) {
         const report = getWeatherReport(w);
