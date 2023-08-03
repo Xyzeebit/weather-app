@@ -1,4 +1,4 @@
-import weather from '../data.json';
+// import weather from '../data.json';
 // import rainCloud from '../assets/rain.png'
 // import cloudyCloud from '../assets/cloudy.png'
 // import partlyCloud from '../assets/cloud.png'
@@ -33,15 +33,15 @@ export async function fetchWeatherReport(place) {
             return { ok: false, error: 'cannot find weather report for ' + place };
         }
     } catch (err) {
-         let location = {};
-         if (weather.resolvedAddress) {
-           const { city, country } = getLocation(weather.resolvedAddress);
-           location = { city, country };
-         }
-         const days = getMainWeatherFromDays(weather);
-         // check if response data object contains weather report
-         return { ok: true, weather: { days, location } };
-        // return { ok: false, error: 'Unable to connect, please try again' };
+        //  let location = {};
+        //  if (weather.resolvedAddress) {
+        //    const { city, country } = getLocation(weather.resolvedAddress);
+        //    location = { city, country };
+        //  }
+        //  const days = getMainWeatherFromDays(weather);
+        //  // check if response data object contains weather report
+        //  return { ok: true, weather: { days, location } };
+        return { ok: false, error: 'Unable to connect, please try again' };
     }
 }
 
@@ -134,8 +134,8 @@ function getWeatherReport(wea) {
     w["cloudcover"] = wea.cloudcover;
     w["visibility"] = wea.visibility;
     w["uvindex"] = wea.uvindex;
-    w["sunrise"] = wea.sunrise ?? weather.days[0].sunrise;
-    w["sunset"] = wea.sunset ?? weather.days[0].sunset;
+    w["sunrise"] = wea.sunrise;
+    w["sunset"] = wea.sunset;
     w["conditions"] = wea.conditions;
     w["description"] = wea.description;
     w["icon"] = wea.icon; //iconImage(wea.icon);
