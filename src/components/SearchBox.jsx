@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { fetchWeatherReport } from "../libs";
-import { updateWeather } from "../redux/weatherSlice";
+import { updateWeather, updateSearch } from "../redux/weatherSlice";
 
 const SearchBox = () => {
   const dispatch = useDispatch();
@@ -9,13 +9,14 @@ const SearchBox = () => {
   const [search, setSearch] = useState(false);
 
   const handleOnChange = ({ target }) => {
-    setCity(target.city);
+    setCity(target.value);
   }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if (city.length >= 3) {
       setSearch(true);
+      dispatch(updateSearch({ searching: true }));
     }
   }
 
