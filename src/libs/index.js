@@ -33,14 +33,7 @@ export async function fetchWeatherReport(place) {
             return { ok: false, error: 'cannot find weather report for ' + place };
         }
     } catch (err) {
-         let location = {};
-         if (weather.resolvedAddress) {
-           const { city, country } = getLocation(weather.resolvedAddress);
-           location = { city, country };
-         }
-        const days = getMainWeatherFromDays(weather);
-        return { ok: true, weather: { days, location} };
-        // return { ok: false, error: 'Unable to connect, please try again' };
+        return { ok: false, error: 'Unable to connect, please try again' };
     }
 }
 
