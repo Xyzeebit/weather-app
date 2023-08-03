@@ -16,15 +16,17 @@ export async function fetchWeatherReport(place) {
         const from = today.toISOString().split('T')[0];
         today.setDate(today.getDate() + 7);
         const to = today.toISOString().split('T')[0];
-        let location = place;
+        let city = 'Lagos';
 
         if (place === undefined) {
-            location = getDefaultLocation();
+            let loc = await getDefaultLocation();
+            if (loc.ok) {
+              city = loc.location.city;
+            }
+        } else {
+            city = place;
         }
-        let city = 'Lagos'
-        if (location.ok) {
-            location.city;
-        }
+        
         const URL = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}/${from}/${to}?unitGroup=metric&key=${apiKey}&contentType=json`;
         const resp = await fetch(URL);
         if (resp.ok) {
