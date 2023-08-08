@@ -33,7 +33,7 @@ const SearchBox = () => {
   }, [dispatch, city, search]);
 
   return (
-    <form className="flex items-center justify-center w-4/5 md:1/2" onSubmit={handleSubmit}>
+    <form className="flex items-center justify-center w-4/5 md:1/2" onSubmit={handleSubmit} data-testid="search-form">
       <input
         type="text"
         value={city}

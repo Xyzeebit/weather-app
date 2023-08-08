@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Testing weather file
+# Testing files
 data.json
+loc.json
