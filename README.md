@@ -71,7 +71,7 @@ yarn test
 
 ## Deployment
 
-The app is deployed and can be accessed at: [https://qweather-nu-vercel.app](https://qweather-nu-vercel.app)
+The app is deployed and can be accessed at: [https://qweather-nu.vercel.app](https://qweather-nu.vercel.app)
 
 ## Contributions
 
