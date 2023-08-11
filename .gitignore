@@ -31,3 +31,4 @@ dist-ssr
 
 # Testing weather file
 data.json
+loc.json

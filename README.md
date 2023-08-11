@@ -1,7 +1,7 @@
 # Qweather
 # Real-Time Weather App
 
-![Real-Time Weather App](app-screenshot.png)
+![Real-Time Weather App](./images/app-screenshot.png)
 
 This is a real-time weather app that I have developed for fetching accurate weather report for any location. The app provides up-to-date weather information for any location, allowing users to check the current weather conditions and forecasts easily.
 
@@ -20,12 +20,11 @@ This is a real-time weather app that I have developed for fetching accurate weat
 - Vite: A fast build tool for modern web development
 - React: A popular JavaScript library for building user interfaces
 - Redux: A predictable state container for managing application state
-- Tailwindcss: A utility-first CSS framework for
-rapidly building custom designs.
+- Tailwindcss: A utility-first CSS framework for rapidly building custom designs.
 - Weather API: A reliable API to fetch real-time weather data
 - Vercel: A platform for deploying web applications with ease
 - Vitest: A testing tool for Vite applications
-- Testing Library/React: A testing utility for React components
+- @testing-library/react: A testing utility for React components
 
 ## Installation
 
@@ -72,7 +71,7 @@ yarn test
 
 ## Deployment
 
-The app is deployed and can be accessed at: [https://qweather-nu-vercel.app](https://www.example.com/real-time-weather-app)
+The app is deployed and can be accessed at: [https://qweather-nu-vercel.app](https://qweather-nu-vercel.app)
 
 ## Contributions
 
